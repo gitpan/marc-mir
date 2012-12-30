@@ -8,3 +8,4 @@ lib/MARC/MIR.pm
 lib/MARC/MIR/Tutorial.pod
 readme.textile
 script/mir_works_on
+t/00_basic.t

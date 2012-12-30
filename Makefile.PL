@@ -20,9 +20,9 @@ my %WriteMakefileArgs = (
   'LICENSE' => 'perl',
   'NAME' => 'marc::mir',
   'PREREQ_PM' => {},
-  'VERSION' => '0.0',
+  'VERSION' => '0.2',
   'test' => {
-    'TESTS' => ''
+    'TESTS' => 't/*.t'
   }
 );
 
