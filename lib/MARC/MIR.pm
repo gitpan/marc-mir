@@ -4,33 +4,9 @@ use autodie;
 use Modern::Perl;
 use Perlude;
 use Perlude::Sh qw< :all >;
+
 # ABSTRACT: DSL to manipulate MIR records.
-
-=head1 MIR: MARC Intermediate Representation
-
-# BUG: with_fields needs $_
-
-This is a early adoption code coming with
-
-    * DSL to manipulate MIR records
-    * ISO2709 parser
-    * ISO2709 writer
-
-perldoc MARC::MIR::tutorial for more information
-
-    * the interface may change
-    * t/ is empty, so use it at your own risk
-
-anyway: the MIR itself will not change. Everything else is but still usable and so much easy to use that former libs.
-
-
-=head1 Contribute ? 
-
-    https://github.com/eiro/p5-marc-mir
-
-=cut
-
-our $VERSION = '0.2';
+our $VERSION = '0.3';
 
 # our %EXPORT_TAGS =
 # ( dsl => [qw<
@@ -74,6 +50,8 @@ map_datafields
 grep_datafields 
 any_datafields 
 
+    append_subfields_to
+
 	tag
 	value
 
@@ -91,6 +69,8 @@ any_datafields
         record_charset
 
         cib_handlers cib_keys cib_reader cib_writer
+
+        indicators
     >;
 # );
 # our @EXPORT_OK = $EXPORT_TAGS{all} = [map @$_, values %EXPORT_TAGS];
@@ -295,8 +275,8 @@ sub _grep_data {
     grep { $code->() } _one_or_array $$on[1]
 }
 
-sub with_fields        (&;$) { &_with_data  }
-sub with_subfields     (&;$) { &_with_data  }
+sub with_fields        (&;$) { $_[1] ||= $_; &_with_data  }
+sub with_subfields     (&;$) { $_[1] ||= $_; &_with_data  }
 sub map_fields         (&;$) { &_map_data   }
 sub map_subfields      (&;$) { &_map_data   }
 sub grep_fields        (&;$) { &_grep_data  }
@@ -310,7 +290,7 @@ sub datafields_only {
 }
 
 sub map_datafields   (&;$) { &datafields_only; &_map_data   }
-sub with_datafields  (&;$) { &datafields_only; &_with_data  }
+# sub with_datafields  (&;$) { &datafields_only; &_with_data  }
 sub grep_datafields  (&;$) { &datafields_only; &_grep_data  }
 sub any_datafields   (&;$) { &datafields_only; &_any_data   }
 
@@ -435,13 +415,13 @@ sub record_charset (_) {
     )[0]
 }
 
-sub yaz_marcdump {
-    # example: yaz_marcdump "-i marc -o marc -f iso-5426 -t utf8 TR167R2344A001.RAW"
-    open my $fh, '-|', "yaz-marcdump @_";
-    sub {
-        local $/ = $MARC::MIR::RS;
-        <$fh> // ()
-    }
+sub append_subfields_to {
+    my ($dest,@data) = @_;
+    @data or @data = @{$$_[1]};
+    push @{ $$dest[1] }
+    ,    @{ $$_[1] };
 }
+
+sub indicators { $$_[2] }
 
 1;
