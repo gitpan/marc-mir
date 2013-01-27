@@ -9,20 +9,29 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'DSL to manipulate MIR records.',
-  'AUTHOR' => 'Marc Chantreux <khatar@phear.org>',
-  'BUILD_REQUIRES' => {},
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.30'
+  "ABSTRACT" => "DSL to manipulate MIR records.",
+  "AUTHOR" => "Marc Chantreux <khatar\@phear.org>",
+  "BUILD_REQUIRES" => {
+    "Test::More" => 0,
+    "YAML" => 0
   },
-  'DISTNAME' => 'marc-mir',
-  'EXE_FILES' => [],
-  'LICENSE' => 'perl',
-  'NAME' => 'marc::mir',
-  'PREREQ_PM' => {},
-  'VERSION' => '0.3',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
+  },
+  "DISTNAME" => "marc-mir",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "marc::mir",
+  "PREREQ_PM" => {
+    "Exporter" => 0,
+    "Modern::Perl" => 0,
+    "Perlude" => 0,
+    "autodie" => 0,
+    "parent" => 0
+  },
+  "VERSION" => "0.4",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 
